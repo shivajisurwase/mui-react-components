@@ -1,0 +1,47 @@
+{
+  "name": "mui-advance-data-grid",
+  "version": "1.0.7",
+  "description": "Data Grid",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc"
+  },
+  "author": "Shivaji & Shyamal",
+  "license": "MIT",
+  "dependencies": {
+    "@mui/icons-material": "^5.14.0",
+    "@mui/material": "^5.14.0",
+    "@mui/styles": "^5.14.0",
+    "@mui/system": "^5.14.0",
+    "moment": "^2.30.1",
+    "tslib": "^2.6.3",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "@types/react": "^18.2.0",
+    "typescript": "^5.5.3"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/shivajisurwase/mui-advance-data-grid.git"
+  },
+  "keywords": [
+    "mui",
+    "material-ui",
+    "data-grid",
+    "custom-table",
+    "react",
+    "typescript"
+  ]
+}
