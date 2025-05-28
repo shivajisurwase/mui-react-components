@@ -1,6 +1,6 @@
 {
-  "name": "mui-advance-data-grid",
-  "version": "1.0.7",
+  "name": "mui-react-components",
+  "version": "0.0.1",
   "description": "Data Grid",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -11,7 +11,6 @@
   "scripts": {
     "build": "tsc"
   },
-  "author": "Shivaji & Shyamal",
   "license": "MIT",
   "dependencies": {
     "@mui/icons-material": "^5.14.0",
@@ -31,10 +30,6 @@
   "peerDependencies": {
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shivajisurwase/mui-advance-data-grid.git"
   },
   "keywords": [
     "mui",
