@@ -44,7 +44,6 @@ import {
   Delete,
   Visibility,
 } from '@mui/icons-material';
-import { delay, exportExcel, extraReducer, initialState } from '../../utils/utility';
 import { styled, useTheme } from '@mui/system';
 import moment from 'moment';
 // import { TableSkeleton } from './Skeleton';
@@ -125,8 +124,6 @@ const MuiToolbar: React.FC<MuiToolbarProps> = ({
 }) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [state, dispatch] = useReducer(extraReducer, initialState);
-
   const { toolbarOptions, filterOptions } = options || {};
   const { onUpload, onDownload, enableColumnArrangement } = toolbarOptions || {};
 
@@ -138,127 +135,122 @@ const MuiToolbar: React.FC<MuiToolbarProps> = ({
     setAnchorEl(null);
   };
 
-  const handleDownload = async () => {
-    dispatch({ type: 'DOWNLOAD_START' });
-    const { data, filename, extension = '.xlsx' } = await onDownload?.();
-    console.log('Data:', data, filename, extension);
+  // const handleDownload = async () => {
+  //   dispatch({ type: 'DOWNLOAD_START' });
+  //   const { data, filename, extension = '.xlsx' } = await onDownload?.();
+  //   console.log('Data:', data, filename, extension);
 
-    if (!data || !filename || !extension) {
-      const missingFields = [];
-      if (!data) missingFields.push('Data');
-      if (!filename) missingFields.push('Filename');
-      if (!extension) missingFields.push('Extension');
+  //   if (!data || !filename || !extension) {
+  //     const missingFields = [];
+  //     if (!data) missingFields.push('Data');
+  //     if (!filename) missingFields.push('Filename');
+  //     if (!extension) missingFields.push('Extension');
 
-      const errorMessage = `Invalid data returned from onDownload. Missing fields: ${missingFields.join(', ')}.`;
-      console.error('Error:', errorMessage);
-      dispatch({ type: 'RESET' });
-      return;
-    }
-    // Filter visible columns
-    const filteredColumns = columns.filter((col) => visibleColumns.includes(col.field));
-    const filteredData = data.map((row: any) => {
-      const filteredRow: any = {};
-      filteredColumns.forEach((col) => {
-        filteredRow[col.headerName] = row[col.field];
-      });
-      return filteredRow;
-    });
+  //     const errorMessage = `Invalid data returned from onDownload. Missing fields: ${missingFields.join(', ')}.`;
+  //     console.error('Error:', errorMessage);
+  //     dispatch({ type: 'RESET' });
+  //     return;
+  //   }
+  //   // Filter visible columns
+  //   const filteredColumns = columns.filter((col) => visibleColumns.includes(col.field));
+  //   const filteredData = data.map((row: any) => {
+  //     const filteredRow: any = {};
+  //     filteredColumns.forEach((col) => {
+  //       filteredRow[col.headerName] = row[col.field];
+  //     });
+  //     return filteredRow;
+  //   });
 
-    exportExcel({ data: filteredData, filename, extension })
-      .then((message) => {
-        dispatch({ type: 'DOWNLOAD_SUCCESS' });
-      })
-      .catch((error) => {
-        console.log('error', error);
-        dispatch({ type: 'SET_ERROR_MESSAGE', payload: error.message });
-        dispatch({ type: 'DOWNLOAD_ERROR' });
-      })
-      .finally(() => {
-        delay(5000).then(() => {
-          dispatch({ type: 'RESET' });
-        });
-      });
-  };
+  //   exportExcel({ data: filteredData, filename, extension })
+  //     .then((message) => {
+  //       dispatch({ type: 'DOWNLOAD_SUCCESS' });
+  //     })
+  //     .catch((error) => {
+  //       console.log('error', error);
+  //       dispatch({ type: 'SET_ERROR_MESSAGE', payload: error.message });
+  //       dispatch({ type: 'DOWNLOAD_ERROR' });
+  //     })
+  //     .finally(() => {
+  //       delay(5000).then(() => {
+  //         dispatch({ type: 'RESET' });
+  //       });
+  //     });
+  // };
 
-  const handleFileChange = (e: any) => {
-    const file = e.target.files[0];
-    dispatch({ type: 'SET_ERROR_MESSAGE', payload: null });
+  // const handleFileChange = (e: any) => {
+  //   const file = e.target.files[0];
+  //   dispatch({ type: 'SET_ERROR_MESSAGE', payload: null });
 
-    if (!file) {
-      dispatch({ type: 'SET_ERROR_MESSAGE', payload: 'No file selected' });
-      return;
-    }
+  //   if (!file) {
+  //     dispatch({ type: 'SET_ERROR_MESSAGE', payload: 'No file selected' });
+  //     return;
+  //   }
 
-    const maxFileSize = 10 * 1024 * 1024;
-    if (file.size > maxFileSize) {
-      dispatch({
-        type: 'SET_ERROR_MESSAGE',
-        payload: `File size exceeds the 10MB limit. The selected file is ${Math.round(file.size / 1024 / 1024)}MB.`,
-      });
-      return;
-    }
+  //   const maxFileSize = 10 * 1024 * 1024;
+  //   if (file.size > maxFileSize) {
+  //     dispatch({
+  //       type: 'SET_ERROR_MESSAGE',
+  //       payload: `File size exceeds the 10MB limit. The selected file is ${Math.round(file.size / 1024 / 1024)}MB.`,
+  //     });
+  //     return;
+  //   }
 
-    const allowedFormats = [
-      'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
-      'application/vnd.ms-excel',
-      'text/csv',
-    ];
+  //   const allowedFormats = [
+  //     'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+  //     'application/vnd.ms-excel',
+  //     'text/csv',
+  //   ];
 
-    if (!allowedFormats.includes(file.type)) {
-      dispatch({
-        type: 'SET_ERROR_MESSAGE',
-        payload: 'Invalid file format. Only .xlsx and .csv files are allowed.',
-      });
-      return;
-    }
+  //   if (!allowedFormats.includes(file.type)) {
+  //     dispatch({
+  //       type: 'SET_ERROR_MESSAGE',
+  //       payload: 'Invalid file format. Only .xlsx and .csv files are allowed.',
+  //     });
+  //     return;
+  //   }
 
-    dispatch({ type: 'UPLOAD_START' });
+  //   dispatch({ type: 'UPLOAD_START' });
 
-    const rs = new Promise((resolve, reject) => {
-      const fileReader = new FileReader();
-      fileReader.readAsArrayBuffer(file);
-      fileReader.onload = (e) => {
-        const bufferArray = e?.target?.result;
-        const wb = XLSX.read(bufferArray, { type: 'buffer' });
-        const wsname = wb.SheetNames[0];
-        const ws = wb.Sheets[wsname];
-        const data = XLSX.utils.sheet_to_json(ws);
-        resolve(data);
-      };
-      fileReader.onerror = (error) => {
-        reject(error);
-        if (inputRef.current) inputRef.current.value = '';
-      };
-    });
+  //   const rs = new Promise((resolve, reject) => {
+  //     const fileReader = new FileReader();
+  //     fileReader.readAsArrayBuffer(file);
+  //     fileReader.onload = (e) => {
+  //       const bufferArray = e?.target?.result;
+  //       const wb = XLSX.read(bufferArray, { type: 'buffer' });
+  //       const wsname = wb.SheetNames[0];
+  //       const ws = wb.Sheets[wsname];
+  //       const data = XLSX.utils.sheet_to_json(ws);
+  //       resolve(data);
+  //     };
+  //     fileReader.onerror = (error) => {
+  //       reject(error);
+  //       if (inputRef.current) inputRef.current.value = '';
+  //     };
+  //   });
 
-    rs.then((result) => {
-      onUpload?.(result).then((flag: string) => {
-        if (flag === 'success') {
-          dispatch({ type: 'UPLOAD_SUCCESS' });
-          delay(5000).then(() => {
-            dispatch({ type: 'RESET' });
-          });
-          if (inputRef.current) inputRef.current.value = '';
-        } else {
-          dispatch({ type: 'UPLOAD_ERROR' });
-          if (inputRef.current) inputRef.current.value = '';
-          delay(5000).then(() => {
-            dispatch({ type: 'RESET' });
-          });
-        }
-      });
-    }).catch((error) => {
-      dispatch({ type: 'UPLOAD_ERROR', payload: error.message || 'File processing error' });
-    });
-  };
+  //   rs.then((result) => {
+  //     onUpload?.(result).then((flag: string) => {
+  //       if (flag === 'success') {
+  //         dispatch({ type: 'UPLOAD_SUCCESS' });
+  //         delay(5000).then(() => {
+  //           dispatch({ type: 'RESET' });
+  //         });
+  //         if (inputRef.current) inputRef.current.value = '';
+  //       } else {
+  //         dispatch({ type: 'UPLOAD_ERROR' });
+  //         if (inputRef.current) inputRef.current.value = '';
+  //         delay(5000).then(() => {
+  //           dispatch({ type: 'RESET' });
+  //         });
+  //       }
+  //     });
+  //   }).catch((error) => {
+  //     dispatch({ type: 'UPLOAD_ERROR', payload: error.message || 'File processing error' });
+  //   });
+  // };
 
   return (
     <>
-      {state.errMsg && (
-        <Alert severity="error">
-          <b>{state.errMsg}</b>
-        </Alert>
-      )}
       <Toolbar
         sx={{
           display: 'flex',
@@ -287,7 +279,7 @@ const MuiToolbar: React.FC<MuiToolbarProps> = ({
         {/* Right Side: Icons */}
         <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           {/* Upload Button */}
-          {onUpload && (
+          {/* {onUpload && (
             <Tooltip title="Upload">
               <Box sx={{ position: 'relative', display: 'inline-block' }}>
                 <IconButton component="label">
@@ -313,10 +305,10 @@ const MuiToolbar: React.FC<MuiToolbarProps> = ({
                 )}
               </Box>
             </Tooltip>
-          )}
+          )} */}
 
           {/* Download Button */}
-          {onDownload && (
+          {/* {onDownload && (
             <Tooltip title="Download">
               <Box sx={{ position: 'relative', display: 'inline-block' }}>
                 <IconButton onClick={handleDownload}>
@@ -341,7 +333,7 @@ const MuiToolbar: React.FC<MuiToolbarProps> = ({
                 )}
               </Box>
             </Tooltip>
-          )}
+          )} */}
 
           {/* Column Visibility Menu */}
           {enableColumnArrangement && (
@@ -559,7 +551,7 @@ const RowRenderer: React.FC<RowRendererProps> = React.memo(
               textAlign: 'center',
             }}
           >
-            {rowActions.map((action, idx) => (
+            {rowActions.map((action: any, idx: any) => (
               <Tooltip key={idx} title={action?.tooltip || ''} arrow>
                 <IconButton
                   sx={{ marginTop: '-6px' }}
