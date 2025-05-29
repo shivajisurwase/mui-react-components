@@ -100,8 +100,8 @@ export const TableToolbar: React.FC<TableToolbarProps> = ({
   };
 
   const handleQuerySearch = () => {
-    const res = (selectedColumns || []).map((x: any) => x.field);
-    if (filterValue.trim() !== '' && res.length > 0) {
+    const res = (selectedColumns || [])?.map((x: any) => x?.field);
+    if (filterValue.trim() !== '' && res?.length > 0) {
       if (typeof onQuerySearch === 'function') {
         onQuerySearch(filterValue, res);
       }
